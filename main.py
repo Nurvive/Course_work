@@ -3,11 +3,13 @@ import sys
 from time import sleep
 import random
 
+trys = 7
 TEXT_COLOR = (90, 100, 252)
 
 pygame.init()
 alphabet = 'а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я'.split()
-words = 'муха кошка пиво лампа шершень лимон хорёк вымпел гроза курица чукча таблица царство мощь носки ножницы арбуз пингвин'.split()
+words = 'муха кошка пиво лампа шершень лимон хорёк вымпел гроза курица чукча таблица царство мощь носки ножницы арбуз ' \
+        'пингвин'.split()
 screen = pygame.display.set_mode((800, 600))
 icon = pygame.image.load('images/icon.png')
 pygame.display.set_icon(icon)
@@ -65,7 +67,7 @@ class Button:
         self.playButton_presence = False
         self.exitButton_presence = False
 
-    def playButton(self, event):
+    def play_button(self, event):
         x_position = 400 - width / 2
         y_position = 200
         position = (x_position, y_position)
@@ -78,7 +80,7 @@ class Button:
                 y_position <= y <= y_position + height) and event.type == pygame.MOUSEBUTTONDOWN:
             return True
 
-    def exitButton(self, event, x_position=400 - width / 2, y_position=200 + line_size * 2):
+    def exit_button(self, event, x_position=400 - width / 2, y_position=200 + line_size * 2):
         position = (x_position, y_position)
         if not self.exitButton_presence:
             text = font.render('Выход', True, TEXT_COLOR)
@@ -98,15 +100,10 @@ def pressed(btn: Button):
 
 # TODO: нажатие клавиши = MOUSEBUTTONDOWN + MOUSEBUTTONUP
 
-
-def game():
-    game = True
-    secretword = getRandomWord(words)
-    screen.blit(background_image, (0, 0))
+def drawing_alphabet():
     k = 450
     e = 70
     letter_position = []
-
     for i in range(len(alphabet)):
         text = font.render(alphabet[i], True, TEXT_COLOR)
         screen.blit(text, (k, e))
@@ -115,6 +112,37 @@ def game():
         if i % 9 == 0 and i != 0:
             k = 450
             e += 65
+    return letter_position
+
+
+def check_letter(letter):
+    global correct_letters
+    global missed_letters
+    if letter in secretword:
+        correct_letters = correct_letters + letter
+        foundallletters = True
+
+        for i in range(len(secretword)):
+            if secretword[i] not in correct_letters:
+                foundallletters = False
+                break
+
+        if foundallletters:
+            alert('ты угадал - ' + secretword)
+        return correct_letters
+
+    else:
+        missed_letters = missed_letters + letter
+
+        if len(missed_letters) == (trys - 1):
+            alert('не угадал, слово было - ' + secretword)
+        return missed_letters
+
+def game():
+    game = True
+    screen.blit(background_image, (0, 0))
+
+    drawing_alphabet()
 
     text = font.render(secretword, True, TEXT_COLOR)
     screen.blit(text, (700 // 2, 30))
@@ -127,17 +155,16 @@ def game():
             button = Button()
             if event.type == pygame.QUIT:
                 exit()
-            if button.exitButton(event, x_position=650 - width / 2, y_position=350 + line_size * 2):
+            if button.exit_button(event, x_position=650 - width / 2, y_position=350 + line_size * 2):
                 main_menu()
             if event.type == pygame.KEYDOWN:
-                guess = getGuess(missed_letters + correct_letters, event)
-
+                check_letter(getGuess(missed_letters + correct_letters, event))
         pygame.display.update()
     # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы,
     #  в правой - массив кнопок букв. Сверху слово
 
 
-def getRandomWord(wordlist):
+def get_random_word(wordlist):
     wordindex = random.randint(0, len(wordlist) - 1)
     return wordlist[wordindex]
 
@@ -158,7 +185,7 @@ def getGuess(alreadyguessed, event):
                     alert("Эта буква уже была")
                 else:
                     return key_buttons[i]
-            else:
+            elif event.key == 27:
                 main_menu()
         clock.tick(60)
 
@@ -172,10 +199,10 @@ def main_menu():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-            if button.playButton(event):
+            if button.play_button(event):
                 game()
 
-            if button.exitButton(event):
+            if button.exit_button(event):
                 sys.exit()
 
             pygame.display.update()
@@ -183,5 +210,6 @@ def main_menu():
 
 
 if __name__ == '__main__':
-    secretword = getRandomWord(words)
+
+    secretword = get_random_word(words)
     main_menu()
