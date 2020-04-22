@@ -102,6 +102,12 @@ def getRandomWord(wordlist):
     wordindex = random.randint(0, len(wordlist) - 1)
     return wordlist[wordindex]
 
+def alert(text):
+    pygame.draw.rect(screen, (169, 169, 169), (width // 2, height // 2, 150, 120))
+    txt = font.render(text, True, TEXT_COLOR)
+    screen.blit(txt, (width // 2 + 50, height // 2 + 30))
+    pygame.display.update()
+    sleep(1)
 
 def main_menu():
     while True:
