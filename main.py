@@ -53,9 +53,12 @@ class Button:
                 y_position <= y <= y_position + height) and event.type == pygame.MOUSEBUTTONDOWN:
             return True
 
+        # TODO: реализовать обведение/подчеркивание кнопок при наведении курсора
+
 
 def pressed(btn: Button):
     pass
+# TODO: нажатие клавиши = MOUSEBUTTONDOWN + MOUSEBUTTONUP
 
 
 def game():
@@ -66,6 +69,9 @@ def game():
         text = font.render('Игра началась', True, TEXT_COLOR)
         screen.blit(text, (0, 0))
         pygame.display.update()
+
+    # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы,
+    #  в правой - массив кнопок букв. Сверху слово
 
 
 while True:
