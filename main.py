@@ -20,8 +20,43 @@ line_size = font.get_linesize()
 screen.blit(background_image, (0, 0))
 size = font.size('Выход')
 width, height = size
-missedletters = ''
-correctletters = ''
+missed_letters = ''
+correct_letters = ''
+key_buttons = {
+    97: 'ф',
+    98: 'и',
+    99: 'с',
+    113: 'й',
+    119: 'ц',
+    103: 'п',
+    101: 'у',
+    104: 'р',
+    114: 'к',
+    106: 'о',
+    116: 'е',
+    107: 'л',
+    121: 'н',
+    108: 'д',
+    117: 'г',
+    122: 'я',
+    105: 'ш',
+    120: 'ч',
+    111: 'щ',
+    118: 'м',
+    112: 'з',
+    110: 'т',
+    115: 'ы',
+    109: 'ь',
+    100: 'в',
+    59: 'ж',
+    102: 'а',
+    44: 'б',
+    46: 'ю',
+    91: 'х',
+    93: 'ъ',
+    39: 'э',
+    96: 'ё'
+}
 
 
 class Button:
@@ -57,7 +92,6 @@ class Button:
         # TODO: реализовать обведение/подчеркивание кнопок при наведении курсора
 
 
-
 def pressed(btn: Button):
     pass
 
@@ -71,16 +105,21 @@ def game():
     screen.blit(background_image, (0, 0))
     k = 450
     e = 70
+    letter_position = []
+
     for i in range(len(alphabet)):
         text = font.render(alphabet[i], True, TEXT_COLOR)
         screen.blit(text, (k, e))
+        letter_position.append((k, e))
         k += 50
         if i % 9 == 0 and i != 0:
             k = 450
             e += 65
+
     text = font.render(secretword, True, TEXT_COLOR)
     screen.blit(text, (700 // 2, 30))
     pygame.display.update()
+
     while game:
 
         clock.tick(60)
@@ -90,8 +129,8 @@ def game():
                 exit()
             if button.exitButton(event, x_position=650 - width / 2, y_position=350 + line_size * 2):
                 main_menu()
-
-
+            if event.type == pygame.KEYDOWN:
+                guess = getGuess(missed_letters + correct_letters, event)
 
         pygame.display.update()
     # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы,
@@ -102,12 +141,27 @@ def getRandomWord(wordlist):
     wordindex = random.randint(0, len(wordlist) - 1)
     return wordlist[wordindex]
 
+
 def alert(text):
     pygame.draw.rect(screen, (169, 169, 169), (width // 2, height // 2, 150, 120))
     txt = font.render(text, True, TEXT_COLOR)
     screen.blit(txt, (width // 2 + 50, height // 2 + 30))
     pygame.display.update()
     sleep(1)
+
+
+def getGuess(alreadyguessed, event):
+    while True:
+        for i in key_buttons.keys():
+            if i == event.key:
+                if key_buttons[i] in alreadyguessed:
+                    alert("Эта буква уже была")
+                else:
+                    return key_buttons[i]
+            else:
+                main_menu()
+        clock.tick(60)
+
 
 def main_menu():
     while True:
