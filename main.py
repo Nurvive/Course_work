@@ -23,7 +23,7 @@ screen.blit(background_image, (0, 0))
 size = font.size('Выход')
 width, height = size
 missed_letters = ''
-
+already_crossing_letters = []
 correct_letters = ''
 key_buttons = {
     97: 'ф',
@@ -112,6 +112,7 @@ def pressed(btn: Button):
 def drawing_alphabet():
     k = 450
     e = 120
+    global letter_position
     letter_position = []
     for i in range(len(alphabet)):
         text = font.render(alphabet[i], True, TEXT_COLOR)
@@ -130,7 +131,7 @@ def check_letter(letter):
     if letter in secretword:
         correct_letters = correct_letters + letter
         foundallletters = True
-
+        crossing_letter(letter)
         for i in range(len(secretword)):
             if secretword[i] not in correct_letters:
                 foundallletters = False
@@ -142,11 +143,22 @@ def check_letter(letter):
 
     else:
         missed_letters = missed_letters + letter
-
+        crossing_letter(letter)
         if len(missed_letters) == (trys - 1):
             alert('не угадал, слово было - ' + secretword)
         return missed_letters
 
+
+def crossing_letter(letter):
+
+    for i in (missed_letters + correct_letters):
+        if i not in already_crossing_letters:
+            x1 = letter_position[alphabet.index(i)][0]
+            y1 = letter_position[alphabet.index(i)][1] + font.size(letter)[1]
+            x2 = letter_position[alphabet.index(i)][0] + font.size(letter)[0] + 1
+            y2 = letter_position[alphabet.index(i)][1]
+            pygame.draw.aaline(screen, TEXT_COLOR, (x1, y1), (x2, y2))
+            already_crossing_letters.append(letter)
 
 def display_secret_word():
     blanks = '_' * len(secretword)
@@ -158,7 +170,7 @@ def display_secret_word():
         blank = font.render(letter, 1, TEXT_COLOR)
         screen.blit(blank, (300 + k, 20))
         k += 30
-
+    pygame.display.update()
 
 def game():
     game = True
