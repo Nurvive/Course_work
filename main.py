@@ -60,9 +60,12 @@ key_buttons = {
     39: 'э',
     96: 'ё'
 }
+
+
 def get_random_word(wordlist):
     wordindex = random.randint(0, len(wordlist) - 1)
     return wordlist[wordindex]
+
 
 secretword = get_random_word(words)
 
@@ -108,7 +111,7 @@ def pressed(btn: Button):
 
 def drawing_alphabet():
     k = 450
-    e = 70
+    e = 120
     letter_position = []
     for i in range(len(alphabet)):
         text = font.render(alphabet[i], True, TEXT_COLOR)
@@ -144,6 +147,7 @@ def check_letter(letter):
             alert('не угадал, слово было - ' + secretword)
         return missed_letters
 
+
 def display_secret_word():
     blanks = '_' * len(secretword)
     for i in range(len(secretword)):
@@ -154,6 +158,7 @@ def display_secret_word():
         blank = font.render(letter, 1, TEXT_COLOR)
         screen.blit(blank, (300 + k, 20))
         k += 30
+
 
 def game():
     game = True
@@ -173,26 +178,28 @@ def game():
             if button.exit_button(event, x_position=650 - width / 2, y_position=350 + line_size * 2):
                 main_menu()
             if event.type == pygame.KEYDOWN:
-                guess = getGuess(missed_letters + correct_letters, event)
+                guess = get_guess(missed_letters + correct_letters, event)
                 if isinstance(guess, str):
                     check_letter(guess)
                 display_secret_word()
         pygame.display.update()
     # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы,
     #  в правой - массив кнопок букв. Сверху слово
-    # TODO: Сделать, чтобы предупреждения исчезали
-
 
 
 def alert(text):
-    pygame.draw.rect(screen, (169, 169, 169), (width // 2, height // 2, 150, 120))
     txt = font.render(text, True, TEXT_COLOR)
-    screen.blit(txt, (width // 2 + 50, height // 2 + 30))
+    screen.blit(txt, (450 // 2, 500))
+
     pygame.display.update()
     sleep(1)
 
+    screen.blit(background_image, (0, 0))
+    drawing_alphabet()
+    display_secret_word()
+    pygame.display.update()
 
-def getGuess(alreadyguessed, event):
+def get_guess(alreadyguessed, event):
     while True:
         for i in key_buttons.keys():
             if i == event.key:
@@ -226,6 +233,4 @@ def main_menu():
 
 
 if __name__ == '__main__':
-
-
     main_menu()
