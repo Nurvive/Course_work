@@ -173,12 +173,14 @@ def game():
             if button.exit_button(event, x_position=650 - width / 2, y_position=350 + line_size * 2):
                 main_menu()
             if event.type == pygame.KEYDOWN:
-                check_letter(getGuess(missed_letters + correct_letters, event))
+                guess = getGuess(missed_letters + correct_letters, event)
+                if isinstance(guess, str):
+                    check_letter(guess)
                 display_secret_word()
         pygame.display.update()
     # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы,
     #  в правой - массив кнопок букв. Сверху слово
-
+    # TODO: Сделать, чтобы предупреждения исчезали
 
 
 
@@ -196,6 +198,7 @@ def getGuess(alreadyguessed, event):
             if i == event.key:
                 if key_buttons[i] in alreadyguessed:
                     alert("Эта буква уже была")
+                    return -1
                 else:
                     return key_buttons[i]
             elif event.key == 27:
