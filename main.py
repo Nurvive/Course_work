@@ -23,6 +23,7 @@ screen.blit(background_image, (0, 0))
 size = font.size('Выход')
 width, height = size
 missed_letters = ''
+
 correct_letters = ''
 key_buttons = {
     97: 'ф',
@@ -59,6 +60,11 @@ key_buttons = {
     39: 'э',
     96: 'ё'
 }
+def get_random_word(wordlist):
+    wordindex = random.randint(0, len(wordlist) - 1)
+    return wordlist[wordindex]
+
+secretword = get_random_word(words)
 
 
 class Button:
@@ -138,14 +144,23 @@ def check_letter(letter):
             alert('не угадал, слово было - ' + secretword)
         return missed_letters
 
+def display_secret_word():
+    blanks = '_' * len(secretword)
+    for i in range(len(secretword)):
+        if secretword[i] in correct_letters:
+            blanks = blanks[:i] + secretword[i] + blanks[i + 1:]
+    k = 0
+    for letter in blanks:
+        blank = font.render(letter, 1, TEXT_COLOR)
+        screen.blit(blank, (300 + k, 20))
+        k += 30
+
 def game():
     game = True
     screen.blit(background_image, (0, 0))
 
     drawing_alphabet()
-
-    text = font.render(secretword, True, TEXT_COLOR)
-    screen.blit(text, (700 // 2, 30))
+    display_secret_word()
     pygame.display.update()
 
     while game:
@@ -159,14 +174,12 @@ def game():
                 main_menu()
             if event.type == pygame.KEYDOWN:
                 check_letter(getGuess(missed_letters + correct_letters, event))
+                display_secret_word()
         pygame.display.update()
     # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы,
     #  в правой - массив кнопок букв. Сверху слово
 
 
-def get_random_word(wordlist):
-    wordindex = random.randint(0, len(wordlist) - 1)
-    return wordlist[wordindex]
 
 
 def alert(text):
@@ -211,5 +224,5 @@ def main_menu():
 
 if __name__ == '__main__':
 
-    secretword = get_random_word(words)
+
     main_menu()
