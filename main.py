@@ -11,13 +11,20 @@ alphabet = 'а б в г д е ё ж з и й к л м н о п р с т у ф х
 words = 'пингвин'.split()
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
 icon = pygame.image.load('images/icon.png')
 pygame.display.set_icon(icon)
 pygame.display.set_caption('Виселица')
+
 clock = pygame.time.Clock()
-background_image = pygame.image.load('images/background.png')
+
+background_image = pygame.image.load('images/back.jpg')
+scale_back = pygame.image.load('images/1.jpg')
+
 pygame.font.init()
+
 font = pygame.font.Font('misc/font.otf', 40)
 line_size = font.get_linesize()
 screen.blit(background_image, (0, 0))
@@ -140,14 +147,12 @@ def check_letter(letter):
 
         if foundallletters:
             alert('ты угадал - ' + secretword)
-        # return correct_letters
 
     else:
         missed_letters = missed_letters + letter
         crossing_letter(letter)
         if len(missed_letters) == (trys - 1):
             alert('не угадал, слово было - ' + secretword)
-        # return missed_letters
 
 
 def crossing_letter(letter):
@@ -184,9 +189,10 @@ def game():
 
     while game:
 
+        button = Button()
         clock.tick(60)
         for event in pygame.event.get():
-            button = Button()
+
             if event.type == pygame.QUIT:
                 exit()
             if button.exit_button(event, x_position=SCREEN_WIDTH // 2 + SCREEN_WIDTH // 3.5 - width // 2,
@@ -197,6 +203,7 @@ def game():
                 if isinstance(guess, str):
                     check_letter(guess)
                 display_secret_word()
+
         pygame.display.update()
     # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы,
     #  в правой - массив кнопок букв. Сверху слово
@@ -208,10 +215,7 @@ def alert(text):
 
     pygame.display.update()
     sleep(1)
-
-    screen.blit(background_image, (0, 0))
-    drawing_alphabet()
-    display_secret_word()
+    screen.blit(scale_back, (400 // 2, 470))
     pygame.display.update()
 
 
