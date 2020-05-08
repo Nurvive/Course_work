@@ -70,6 +70,32 @@ key_buttons = {
 }
 
 
+def again():
+    alert("Хочешь сыграть ещё раз?")
+    while 1:
+        for i in pygame.event.get():
+            if i.type == pygame.KEYDOWN:
+                if i.key == 108:
+                    replay()
+                    pygame.display.update()
+                    game()
+                    return 0
+                elif i.key == 121:
+                    replay()
+                    main_menu()
+            clock.tick(240)
+
+def replay():
+    global secretword
+    global correct_letters
+    global missed_letters
+    global already_crossing_letters
+    secretword = get_random_word(words)
+    correct_letters = ''
+    missed_letters = ''
+    already_crossing_letters.clear()
+
+
 def get_random_word(wordlist):
     wordindex = random.randint(0, len(wordlist) - 1)
     return wordlist[wordindex]
@@ -119,7 +145,7 @@ def pressed(btn: Button):
 
 def drawing_alphabet():
     k = SCREEN_WIDTH // 1.6
-    e = SCREEN_HEIGHT //6
+    e = SCREEN_HEIGHT // 6
     global letter_position
     letter_position = []
     for i in range(len(alphabet)):
@@ -127,7 +153,7 @@ def drawing_alphabet():
         screen.blit(text, (k, e))
         letter_position.append((k, e))
         k += 50
-        if i % 8 == 0 and i != 0 :
+        if i % 8 == 0 and i != 0:
             k = SCREEN_WIDTH // 1.6
             e += 65
     return letter_position
@@ -147,12 +173,14 @@ def check_letter(letter):
 
         if foundallletters:
             alert('ты угадал - ' + secretword)
+            return True
 
     else:
         missed_letters = missed_letters + letter
         crossing_letter(letter)
         if len(missed_letters) == (trys - 1):
             alert('не угадал, слово было - ' + secretword)
+            return True
 
 
 def crossing_letter(letter):
@@ -190,18 +218,20 @@ def game():
     while game:
 
         button = Button()
-        clock.tick(60)
+        clock.tick(240)
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
                 exit()
             if button.exit_button(event, x_position=SCREEN_WIDTH // 2 + SCREEN_WIDTH // 3.5 - width // 2,
                                   y_position=SCREEN_HEIGHT // 1.5 + line_size * 2):
+                replay()
                 main_menu()
             if event.type == pygame.KEYDOWN:
                 guess = get_guess(missed_letters + correct_letters, event)
                 if isinstance(guess, str):
-                    check_letter(guess)
+                    if check_letter(guess):
+                        again()
                 display_secret_word()
 
         pygame.display.update()
@@ -230,7 +260,7 @@ def get_guess(alreadyguessed, event):
                     return key_buttons[i]
             elif event.key == 27:
                 main_menu()
-        clock.tick(60)
+        clock.tick(240)
 
 
 def main_menu():
@@ -249,7 +279,7 @@ def main_menu():
                 sys.exit()
 
             pygame.display.update()
-            clock.tick(60)
+            clock.tick(240)
 
 
 if __name__ == '__main__':
