@@ -8,7 +8,7 @@ TEXT_COLOR = (90, 100, 252)
 
 pygame.init()
 alphabet = 'а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я'.split()
-words = 'пингвин'.split()
+words = 'море автомобиль нога монитор башня пакет наушники рюкзак ток бутылка'.split()
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 
@@ -71,9 +71,16 @@ key_buttons = {
 
 
 def again():
-    alert("Хочешь сыграть ещё раз?")
+    alert("Хочешь сыграть ещё раз?(д/н)")
+    button = Button()
     while 1:
         for i in pygame.event.get():
+            if button.exit_button(i, x_position=SCREEN_WIDTH // 2 + SCREEN_WIDTH // 3.5 - width // 2,
+                                  y_position=SCREEN_HEIGHT // 1.5 + line_size * 2):
+                replay()
+                main_menu()
+            if i.type == pygame.QUIT:
+                exit()
             if i.type == pygame.KEYDOWN:
                 if i.key == 108:
                     replay()
@@ -84,6 +91,7 @@ def again():
                     replay()
                     main_menu()
             clock.tick(240)
+
 
 def replay():
     global secretword
@@ -172,6 +180,7 @@ def check_letter(letter):
                 break
 
         if foundallletters:
+            display_secret_word()
             alert('ты угадал - ' + secretword)
             return True
 
@@ -179,6 +188,7 @@ def check_letter(letter):
         missed_letters = missed_letters + letter
         crossing_letter(letter)
         if len(missed_letters) == (trys - 1):
+            display_secret_word()
             alert('не угадал, слово было - ' + secretword)
             return True
 
