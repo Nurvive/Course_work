@@ -1,7 +1,6 @@
 language: python
 python: 3.8.1
 install:
-  - pip install .
-  - pip install -r requirements.txt
+  - pip install pygame
 script:
   python3 main.py
