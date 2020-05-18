@@ -224,10 +224,10 @@ def game():
     drawing_alphabet()
     display_secret_word()
     pygame.display.update()
-
+    button = Button()
     while game:
 
-        button = Button()
+
         clock.tick(240)
         for event in pygame.event.get():
 
