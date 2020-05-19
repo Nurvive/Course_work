@@ -201,7 +201,7 @@ def crossing_letter(letter):
             x2 = letter_position[alphabet.index(i)][0] + font.size(letter)[0] + 1
             y2 = letter_position[alphabet.index(i)][1]
             slash = font.render('/', True, (255, 0, 0))
-            screen.blit(slash, (x2 - 15, y2))
+            screen.blit(slash, (x2 - 19, y2 + 6))
             pygame.display.update()
             already_crossing_letters.append(letter)
 
