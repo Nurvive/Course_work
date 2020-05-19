@@ -200,7 +200,9 @@ def crossing_letter(letter):
             y1 = letter_position[alphabet.index(i)][1] + font.size(letter)[1]
             x2 = letter_position[alphabet.index(i)][0] + font.size(letter)[0] + 1
             y2 = letter_position[alphabet.index(i)][1]
-            pygame.draw.aaline(screen, TEXT_COLOR, (x1, y1), (x2, y2))
+            slash = font.render('/', True, (255, 0, 0))
+            screen.blit(slash, (x2 - 15, y2))
+            pygame.display.update()
             already_crossing_letters.append(letter)
 
 
@@ -215,6 +217,10 @@ def display_secret_word():
         screen.blit(blank, (k, 20))
         k += 30
         pygame.display.update()
+
+
+def draw_hangman():
+    pass
 
 
 def game():
