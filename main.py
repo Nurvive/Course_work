@@ -6,9 +6,14 @@ import random
 trys = 7
 TEXT_COLOR = (90, 100, 252)
 
+fin = open("misc/word_rus.txt", encoding="utf-8")
+data = fin.readlines()
+for i in range(len(data)):
+    data[i] = data[i][:-1]
+
 pygame.init()
 alphabet = 'а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я'.split()
-words = 'море автомобиль нога монитор башня пакет наушники рюкзак ток бутылка'.split()
+#words = 'море'.split()
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 
@@ -98,18 +103,17 @@ def replay():
     global correct_letters
     global missed_letters
     global already_crossing_letters
-    secretword = get_random_word(words)
+    secretword = get_random_word(data)
     correct_letters = ''
     missed_letters = ''
     already_crossing_letters.clear()
 
 
 def get_random_word(wordlist):
-    wordindex = random.randint(0, len(wordlist) - 1)
-    return wordlist[wordindex]
+    return random.choice(wordlist)
 
 
-secretword = get_random_word(words)
+secretword = get_random_word(data)
 
 
 class Button:
