@@ -248,11 +248,12 @@ def game():
                 replay()
                 main_menu()
             if event.type == pygame.KEYDOWN:
-                guess = get_guess(missed_letters + correct_letters, event)
-                if isinstance(guess, str):
-                    if check_letter(guess):
-                        again()
-                display_secret_word()
+                if event.key in key_buttons.keys() or event.key == 27:
+                    guess = get_guess(missed_letters + correct_letters, event)
+                    if isinstance(guess, str):
+                        if check_letter(guess):
+                            again()
+                    display_secret_word()
 
         pygame.display.update()
     # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы,
