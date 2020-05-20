@@ -13,7 +13,7 @@ for i in range(len(data)):
 
 pygame.init()
 alphabet = 'а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я'.split()
-#words = 'море'.split()
+# words = 'море'.split()
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 
@@ -186,6 +186,8 @@ def check_letter(letter):
         if foundallletters:
             display_secret_word()
             alert('ты угадал - ' + secretword)
+            sleep(1.5)
+            painting_alert()
             return True
 
     else:
@@ -194,14 +196,14 @@ def check_letter(letter):
         if len(missed_letters) == (trys - 1):
             display_secret_word()
             alert('не угадал, слово было - ' + secretword)
+            sleep(1.5)
+            painting_alert()
             return True
 
 
 def crossing_letter(letter):
     for i in (missed_letters + correct_letters):
         if i not in already_crossing_letters:
-            x1 = letter_position[alphabet.index(i)][0]
-            y1 = letter_position[alphabet.index(i)][1] + font.size(letter)[1]
             x2 = letter_position[alphabet.index(i)][0] + font.size(letter)[0] + 1
             y2 = letter_position[alphabet.index(i)][1]
             slash = font.render('/', True, (255, 0, 0))
@@ -237,7 +239,6 @@ def game():
     button = Button()
     while game:
 
-
         clock.tick(240)
         for event in pygame.event.get():
 
@@ -248,6 +249,7 @@ def game():
                 replay()
                 main_menu()
             if event.type == pygame.KEYDOWN:
+                painting_alert()
                 if event.key in key_buttons.keys() or event.key == 27:
                     guess = get_guess(missed_letters + correct_letters, event)
                     if isinstance(guess, str):
@@ -256,8 +258,7 @@ def game():
                     display_secret_word()
 
         pygame.display.update()
-    # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы,
-    #  в правой - массив кнопок букв. Сверху слово
+    # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы
 
 
 def alert(text):
@@ -265,10 +266,13 @@ def alert(text):
     screen.blit(txt, (450 // 2, 500))
 
     pygame.display.update()
-    sleep(1)
+    # sleep(1)
+    # screen.blit(scale_back, (400 // 2, 470))
+    # pygame.display.update()
+
+def painting_alert():
     screen.blit(scale_back, (400 // 2, 470))
     pygame.display.update()
-
 
 def get_guess(alreadyguessed, event):
     while True:
