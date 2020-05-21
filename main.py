@@ -75,7 +75,7 @@ key_buttons = {
 }
 
 
-def again():
+def again():  # спарашивает пользователя о перезапуске
     alert("Хочешь сыграть ещё раз?(д/н)")
     button = Button()
     while 1:
@@ -98,7 +98,7 @@ def again():
             clock.tick(240)
 
 
-def replay():
+def replay():  # перезапускает игру
     global secretword
     global correct_letters
     global missed_letters
@@ -109,7 +109,7 @@ def replay():
     already_crossing_letters.clear()
 
 
-def get_random_word(wordlist):
+def get_random_word(wordlist):  # возвращает случайное слово
     return random.choice(wordlist)
 
 
@@ -146,14 +146,9 @@ class Button:
                 y_position <= y <= y_position + height) and event.type == pygame.MOUSEBUTTONDOWN:
             return True
 
-        # TODO: реализовать обведение/подчеркивание кнопок при наведении курсора
 
 
-def pressed(btn: Button):
-    pass
-
-
-def drawing_alphabet():
+def drawing_alphabet():  # отрисовывает алфавит
     k = SCREEN_WIDTH // 1.6
     e = SCREEN_HEIGHT // 6
     global letter_position
@@ -169,7 +164,7 @@ def drawing_alphabet():
     return letter_position
 
 
-def check_letter(letter):
+def check_letter(letter):  # проверяет введенную букву на правильность/неправильность
     global correct_letters
     global missed_letters
     if letter in secretword:
@@ -200,7 +195,7 @@ def check_letter(letter):
             return True
 
 
-def crossing_letter(letter):
+def crossing_letter(letter):  # зачеркивает введенную букву
     for i in (missed_letters + correct_letters):
         if i not in already_crossing_letters:
             x2 = letter_position[alphabet.index(i)][0] + font.size(letter)[0] + 1
@@ -211,7 +206,7 @@ def crossing_letter(letter):
             already_crossing_letters.append(letter)
 
 
-def display_secret_word():
+def display_secret_word():  # отрисовывает серетное слово
     blanks = '_' * len(secretword)
     for i in range(len(secretword)):
         if secretword[i] in correct_letters:
@@ -224,7 +219,7 @@ def display_secret_word():
         pygame.display.update()
 
 
-def draw_hangman():
+def draw_hangman():  # рисует виселицу
     base = False
 
     if not base:
@@ -255,7 +250,7 @@ def draw_hangman():
         base = False
 
 
-def game():
+def game():  # основной цикл в котором происходит игра
     game = True
     screen.blit(background_image, (0, 0))
 
@@ -287,20 +282,19 @@ def game():
         pygame.display.update()
 
 
-def alert(text):
+def alert(text):  # показывает уведомления
     txt = font.render(text, True, TEXT_COLOR)
     screen.blit(txt, (450 // 2, 500))
 
     pygame.display.update()
-    # sleep(1)
-    # screen.blit(scale_back, (400 // 2, 470))
-    # pygame.display.update()
 
-def painting_alert():
-    screen.blit(scale_back, (400 // 2, 470))
+
+def painting_alert():  # стирает уведомления
+    screen.blit(scale_back, (400 // 2, 476))
     pygame.display.update()
 
-def get_guess(alreadyguessed, event):
+
+def get_guess(alreadyguessed, event):  # возвращает введенную букву
     while True:
         for i in key_buttons.keys():
             if i == event.key:
@@ -314,7 +308,7 @@ def get_guess(alreadyguessed, event):
         clock.tick(240)
 
 
-def main_menu():
+def main_menu():  # рисует главное меню
     while True:
         for event in pygame.event.get():
             button = Button()
