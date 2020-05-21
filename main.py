@@ -2,7 +2,6 @@ import pygame
 import sys
 from time import sleep
 import random
-from pygame import gfxdraw
 
 trys = 7
 TEXT_COLOR = (90, 100, 252)
@@ -154,8 +153,6 @@ def pressed(btn: Button):
     pass
 
 
-# TODO: нажатие клавиши = MOUSEBUTTONDOWN + MOUSEBUTTONUP
-
 def drawing_alphabet():
     k = SCREEN_WIDTH // 1.6
     e = SCREEN_HEIGHT // 6
@@ -267,10 +264,6 @@ def game():
     pygame.display.update()
     button = Button()
     while game:
-<<<<<<< HEAD
-=======
-
->>>>>>> 62122832847a03af4583a236f16eb4da28ab5164
         clock.tick(240)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -292,9 +285,6 @@ def game():
                     display_secret_word()
 
         pygame.display.update()
-<<<<<<< HEAD
-=======
->>>>>>> 62122832847a03af4583a236f16eb4da28ab5164
 
 
 def alert(text):
