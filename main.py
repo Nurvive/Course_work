@@ -2,6 +2,7 @@ import pygame
 import sys
 from time import sleep
 import random
+from pygame import gfxdraw
 
 trys = 7
 TEXT_COLOR = (90, 100, 252)
@@ -190,6 +191,7 @@ def check_letter(letter):
 
     else:
         missed_letters = missed_letters + letter
+        draw_hangman()
         crossing_letter(letter)
         if len(missed_letters) == (trys - 1):
             display_secret_word()
@@ -224,7 +226,34 @@ def display_secret_word():
 
 
 def draw_hangman():
-    pass
+    base = False
+
+    if not base:
+        pygame.draw.rect(screen, (0, 0, 255), (100, SCREEN_HEIGHT // 1.5 + line_size * 2, 150, 8))
+        pygame.draw.rect(screen, (0, 0, 255), (171, SCREEN_HEIGHT // 1.5 + line_size * 2, 8, -450))
+        pygame.draw.rect(screen, (0, 0, 255), (171, SCREEN_HEIGHT // 1.5 + line_size * 2 - 455, 80, 8))
+        pygame.draw.rect(screen, (0, 0, 255), (251, SCREEN_HEIGHT // 1.5 + line_size * 2 - 455, 8, 50))
+
+        base = True
+
+    if len(missed_letters) == 1:
+        pygame.draw.circle(screen, (0, 0, 255), (255, 210), 30, 5)
+
+    if len(missed_letters) == 2:
+        pygame.draw.rect(screen, (0, 0, 255), (253, 235, 5, 100))
+
+    if len(missed_letters) == 3:
+        pygame.draw.line(screen, (0, 0, 255), (253, 335), (233, 375), 5)
+
+    if len(missed_letters) == 4:
+        pygame.draw.line(screen, (0, 0, 255), (258, 335), (273, 375), 5)
+
+    if len(missed_letters) == 5:
+        pygame.draw.line(screen, (0, 0, 255), (253, 255), (233, 295), 5)
+
+    if len(missed_letters) == 6:
+        pygame.draw.line(screen, (0, 0, 255), (258, 255), (273, 295), 5)
+        base = False
 
 
 def game():
@@ -236,17 +265,17 @@ def game():
     pygame.display.update()
     button = Button()
     while game:
-
-
         clock.tick(240)
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 exit()
             if button.exit_button(event, x_position=SCREEN_WIDTH // 2 + SCREEN_WIDTH // 3.5 - width // 2,
                                   y_position=SCREEN_HEIGHT // 1.5 + line_size * 2):
                 replay()
                 main_menu()
+
+            draw_hangman()
+
             if event.type == pygame.KEYDOWN:
                 guess = get_guess(missed_letters + correct_letters, event)
                 if isinstance(guess, str):
@@ -255,8 +284,6 @@ def game():
                 display_secret_word()
 
         pygame.display.update()
-    # TODO: написать Виселицу. В левой части окна отрисовка картинки виселицы,
-    #  в правой - массив кнопок букв. Сверху слово
 
 
 def alert(text):
