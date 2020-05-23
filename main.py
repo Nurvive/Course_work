@@ -323,6 +323,9 @@ def main_menu():  # рисует главное меню
             if button.exit_button(event):
                 sys.exit()
 
+            name_font = pygame.font.Font('misc/font.otf', 70)
+            name = name_font.render("ВИСЕЛИЦА", True, TEXT_COLOR)
+            screen.blit(name, (515, 15))
             pygame.display.update()
             clock.tick(240)
 
