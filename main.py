@@ -3,7 +3,7 @@ import sys
 from time import sleep
 import random
 
-trys = 7
+tries = 7
 TEXT_COLOR = (90, 100, 252)
 
 fin = open("misc/word_rus.txt", encoding="utf-8")
@@ -79,41 +79,41 @@ def again():  # спарашивает пользователя о переза�
     alert("Хочешь сыграть ещё раз?(д/н)")
     button = Button()
     while 1:
-        for i in pygame.event.get():
-            if button.exit_button(i, x_position=SCREEN_WIDTH // 2 + SCREEN_WIDTH // 3.5 - width // 2,
+        for button_event in pygame.event.get():
+            if button.exit_button(button_event, x_position=SCREEN_WIDTH // 2 + SCREEN_WIDTH // 3.5 - width // 2,
                                   y_position=SCREEN_HEIGHT // 1.5 + line_size * 2):
                 replay()
                 main_menu()
-            if i.type == pygame.QUIT:
+            if button_event.type == pygame.QUIT:
                 exit()
-            if i.type == pygame.KEYDOWN:
-                if i.key == 108:
+            if button_event.type == pygame.KEYDOWN:
+                if button_event.key == 108:
                     replay()
                     pygame.display.update()
                     game()
                     return 0
-                elif i.key == 121:
+                elif button_event.key == 121:
                     replay()
                     main_menu()
             clock.tick(240)
 
 
 def replay():  # перезапускает игру
-    global secretword
+    global secret_word
     global correct_letters
     global missed_letters
     global already_crossing_letters
-    secretword = get_random_word(data)
+    secret_word = get_random_word(data)
     correct_letters = ''
     missed_letters = ''
     already_crossing_letters.clear()
 
 
-def get_random_word(wordlist):  # возвращает случайное слово
-    return random.choice(wordlist)
+def get_random_word(words):  # возвращает случайное слово
+    return random.choice(words)
 
 
-secretword = get_random_word(data)
+secret_word = get_random_word(data)
 
 
 class Button:
@@ -147,7 +147,6 @@ class Button:
             return True
 
 
-
 def drawing_alphabet():  # отрисовывает алфавит
     k = SCREEN_WIDTH // 1.6
     e = SCREEN_HEIGHT // 6
@@ -167,18 +166,18 @@ def drawing_alphabet():  # отрисовывает алфавит
 def check_letter(letter):  # проверяет введенную букву на правильность/неправильность
     global correct_letters
     global missed_letters
-    if letter in secretword:
+    if letter in secret_word:
         correct_letters = correct_letters + letter
-        foundallletters = True
+        found_all = True
         crossing_letter(letter)
-        for i in range(len(secretword)):
-            if secretword[i] not in correct_letters:
-                foundallletters = False
+        for i in range(len(secret_word)):
+            if secret_word[i] not in correct_letters:
+                found_all = False
                 break
 
-        if foundallletters:
+        if found_all:
             display_secret_word()
-            alert('ты угадал - ' + secretword)
+            alert('ты угадал - ' + secret_word)
             sleep(1.5)
             painting_alert()
             return True
@@ -187,19 +186,19 @@ def check_letter(letter):  # проверяет введенную букву н
         missed_letters = missed_letters + letter
         draw_hangman()
         crossing_letter(letter)
-        if len(missed_letters) == (trys - 1):
+        if len(missed_letters) == (tries - 1):
             display_secret_word()
-            alert('не угадал, слово было - ' + secretword)
+            alert('не угадал, слово было - ' + secret_word)
             sleep(1.5)
             painting_alert()
             return True
 
 
 def crossing_letter(letter):  # зачеркивает введенную букву
-    for i in (missed_letters + correct_letters):
-        if i not in already_crossing_letters:
-            x2 = letter_position[alphabet.index(i)][0] + font.size(letter)[0] + 1
-            y2 = letter_position[alphabet.index(i)][1]
+    for any_letter in (missed_letters + correct_letters):
+        if any_letter not in already_crossing_letters:
+            x2 = letter_position[alphabet.index(any_letter)][0] + font.size(letter)[0] + 1
+            y2 = letter_position[alphabet.index(any_letter)][1]
             slash = font.render('/', True, (255, 0, 0))
             screen.blit(slash, (x2 - 19, y2 + 6))
             pygame.display.update()
@@ -207,10 +206,10 @@ def crossing_letter(letter):  # зачеркивает введенную бук
 
 
 def display_secret_word():  # отрисовывает серетное слово
-    blanks = '_' * len(secretword)
-    for i in range(len(secretword)):
-        if secretword[i] in correct_letters:
-            blanks = blanks[:i] + secretword[i] + blanks[i + 1:]
+    blanks = '_' * len(secret_word)
+    for letter in range(len(secret_word)):
+        if secret_word[letter] in correct_letters:
+            blanks = blanks[:letter] + secret_word[letter] + blanks[letter + 1:]
     k = SCREEN_WIDTH // 2.5
     for letter in blanks:
         blank = font.render(letter, 1, TEXT_COLOR)
@@ -220,15 +219,11 @@ def display_secret_word():  # отрисовывает серетное слов
 
 
 def draw_hangman():  # рисует виселицу
-    base = False
 
-    if not base:
-        pygame.draw.rect(screen, (0, 0, 255), (100, SCREEN_HEIGHT // 1.5 + line_size * 2, 150, 8))
-        pygame.draw.rect(screen, (0, 0, 255), (171, SCREEN_HEIGHT // 1.5 + line_size * 2, 8, -450))
-        pygame.draw.rect(screen, (0, 0, 255), (171, SCREEN_HEIGHT // 1.5 + line_size * 2 - 455, 80, 8))
-        pygame.draw.rect(screen, (0, 0, 255), (251, SCREEN_HEIGHT // 1.5 + line_size * 2 - 455, 8, 50))
-
-        base = True
+    pygame.draw.rect(screen, (0, 0, 255), (100, SCREEN_HEIGHT // 1.5 + line_size * 2, 150, 8))
+    pygame.draw.rect(screen, (0, 0, 255), (171, SCREEN_HEIGHT // 1.5 + line_size * 2, 8, -450))
+    pygame.draw.rect(screen, (0, 0, 255), (171, SCREEN_HEIGHT // 1.5 + line_size * 2 - 455, 80, 8))
+    pygame.draw.rect(screen, (0, 0, 255), (251, SCREEN_HEIGHT // 1.5 + line_size * 2 - 455, 8, 50))
 
     if len(missed_letters) == 1:
         pygame.draw.circle(screen, (0, 0, 255), (255, 210), 30, 5)
@@ -247,18 +242,17 @@ def draw_hangman():  # рисует виселицу
 
     if len(missed_letters) == 6:
         pygame.draw.line(screen, (0, 0, 255), (258, 255), (273, 295), 5)
-        base = False
 
 
 def game():  # основной цикл в котором происходит игра
-    game = True
+    playing = True
     screen.blit(background_image, (0, 0))
 
     drawing_alphabet()
     display_secret_word()
     pygame.display.update()
     button = Button()
-    while game:
+    while playing:
         clock.tick(240)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -294,15 +288,15 @@ def painting_alert():  # стирает уведомления
     pygame.display.update()
 
 
-def get_guess(alreadyguessed, event):  # возвращает введенную букву
+def get_guess(guessed, event):  # возвращает введенную букву
     while True:
-        for i in key_buttons.keys():
-            if i == event.key:
-                if key_buttons[i] in alreadyguessed:
+        for key in key_buttons.keys():
+            if key == event.key:
+                if key_buttons[key] in guessed:
                     alert("Эта буква уже была")
                     return -1
                 else:
-                    return key_buttons[i]
+                    return key_buttons[key]
             elif event.key == 27:
                 main_menu()
         clock.tick(240)
