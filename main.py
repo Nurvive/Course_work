@@ -13,7 +13,6 @@ for i in range(len(data)):
 
 pygame.init()
 alphabet = 'а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я'.split()
-# words = 'море'.split()
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 
@@ -91,7 +90,7 @@ def again():  # спарашивает пользователя о переза�
                     replay()
                     pygame.display.update()
                     game()
-                    return 0
+                    return
                 elif button_event.key == 121:
                     replay()
                     main_menu()
@@ -160,7 +159,7 @@ def drawing_alphabet():  # отрисовывает алфавит
         if i % 8 == 0 and i != 0:
             k = SCREEN_WIDTH // 1.6
             e += 65
-    return letter_position
+    return
 
 
 def check_letter(letter):  # проверяет введенную букву на правильность/неправильность
