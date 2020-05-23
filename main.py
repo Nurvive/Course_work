@@ -212,7 +212,7 @@ def display_secret_word():  # отрисовывает серетное слов
             blanks = blanks[:letter] + secret_word[letter] + blanks[letter + 1:]
     k = SCREEN_WIDTH // 2.5
     for letter in blanks:
-        blank = font.render(letter, 1, TEXT_COLOR)
+        blank = font.render(letter, True, TEXT_COLOR)
         screen.blit(blank, (k, 20))
         k += 30
         pygame.display.update()
